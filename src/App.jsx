@@ -255,32 +255,34 @@ function MovieDetail({ movie, onClose }) {
           {/* Showtimes */}
           <div className={styles.showtimes}>
             <div className={styles.blockLabel}>Horários — semana {fmtWeek(scheduleWeek.start, scheduleWeek.end)}</div>
-            {sala1.length > 0 && (
-              <div className={styles.roomRow}>
-                <span className={`${styles.roomTag} ${styles.sala1}`}>Sala 1</span>
-                <div className={styles.timePills}>
-                  {sala1.map((s, i) => (
-                    <div className={styles.timePill} key={i}>
-                      <span className={styles.timeHour}>{s.time}</span>
-                      <span className={styles.timeVer}>{s.version}</span>
-                    </div>
-                  ))}
+            <div className={styles.roomsRow}>
+              {sala1.length > 0 && (
+                <div className={styles.roomRow}>
+                  <span className={`${styles.roomTag} ${styles.sala1}`}>Sala 1</span>
+                  <div className={styles.timePills}>
+                    {sala1.map((s, i) => (
+                      <div className={styles.timePill} key={i}>
+                        <span className={styles.timeHour}>{s.time}</span>
+                        <span className={styles.timeVer}>{s.version}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            {sala2.length > 0 && (
-              <div className={styles.roomRow}>
-                <span className={`${styles.roomTag} ${styles.sala2}`}>Sala 2</span>
-                <div className={styles.timePills}>
-                  {sala2.map((s, i) => (
-                    <div className={styles.timePill} key={i}>
-                      <span className={styles.timeHour}>{s.time}</span>
-                      <span className={styles.timeVer}>{s.version}</span>
-                    </div>
-                  ))}
+              )}
+              {sala2.length > 0 && (
+                <div className={styles.roomRow}>
+                  <span className={`${styles.roomTag} ${styles.sala2}`}>Sala 2</span>
+                  <div className={styles.timePills}>
+                    {sala2.map((s, i) => (
+                      <div className={styles.timePill} key={i}>
+                        <span className={styles.timeHour}>{s.time}</span>
+                        <span className={styles.timeVer}>{s.version}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Presencial */}

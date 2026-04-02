@@ -662,9 +662,17 @@
 }
 
 /* ── SHOWTIMES ───────────────────────────────────────── */
-.showtimes { display: flex; flex-direction: column; gap: 0.75rem; }
+.showtimes { display: flex; flex-direction: column; gap: 0.6rem; }
 
-.roomRow { display: flex; flex-direction: column; gap: 0.5rem; }
+.roomsRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.roomRow { display: flex; flex-direction: column; gap: 0.5rem; min-width: 120px; }
 
 .roomTag {
   display: inline-flex;
@@ -734,7 +742,6 @@
   background: rgba(224, 64, 251, 0.06);
   border: 1px solid rgba(224, 64, 251, 0.18);
   border-radius: 10px;
-  margin-top: auto;
 }
 
 .presencialIcon { color: var(--magenta); flex-shrink: 0; margin-top: 1px; }
