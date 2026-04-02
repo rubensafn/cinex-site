@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm info:*)",
+      "Bash(npm create:*)",
+      "Bash(2>&1)",
+      "Bash(npx create-vite@latest --template react .)",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\LOGOCHAPADA_VETORIZADA_CINEX_BRANCA.png\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\logo-white.png\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\FAVICON_ICONE_CINEX.png\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\favicon.png\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\BRINNAN\\\\Brinnan Black.otf\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\fonts\\\\Brinnan-Black.otf\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\BRINNAN\\\\Brinnan Bold.otf\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\fonts\\\\Brinnan-Bold.otf\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\BRINNAN\\\\Brinnan Regular.otf\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\fonts\\\\Brinnan-Regular.otf\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\BRINNAN\\\\Brinnan Light.otf\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\fonts\\\\Brinnan-Light.otf\")",
+      "Bash(cp \"F:\\\\CONEX\\\\CLIENTES\\\\CINEX - DSKP\\\\LOGOS\\\\BRINNAN\\\\Brinnan Thin.otf\" \"C:\\\\Users\\\\ruben\\\\cinex-site\\\\public\\\\fonts\\\\Brinnan-Thin.otf\")",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "WebFetch(domain:vortex-studio.webflow.io)",
+      "Bash(curl -s \"https://vortex-studio.webflow.io/home-extra\")",
+      "Bash(curl -s \"https://assets-global.website-files.com/64c383974e1c7df81ca46da0/css/vortex-studio.webflow.51ac0652a.css\")",
+      "Bash(curl -s \"https://assets-global.website-files.com/64c383974e1c7df81ca46da0/js/webflow.e953044ec.js\")",
+      "WebSearch",
+      "WebFetch(domain:www.themoviedb.org)"
+    ]
+  }
+}

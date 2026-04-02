@@ -1,0 +1,31 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #090310;
+  color: #F5F0FF;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090310;
+}
+::-webkit-scrollbar-thumb {
+  background: #2D1050;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E040FB;
+}
