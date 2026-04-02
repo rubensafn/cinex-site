@@ -9,9 +9,10 @@ html {
 }
 
 body {
-  background: #090310;
+  background: #080212;
   color: #F5F0FF;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Brinnan', sans-serif;
+  font-weight: 300;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }

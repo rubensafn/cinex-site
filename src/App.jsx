@@ -14,9 +14,40 @@ function fmtWeek(start, end) {
 }
 
 function AgeBadge({ rating }) {
-  const cls = rating === 'L' ? styles.badgeL : rating === '14' ? styles.badge14 : styles.badge16
+  const cls   = rating === 'L' ? styles.badgeL : rating === '14' ? styles.badge14 : styles.badge16
   const label = rating === 'L' ? 'Livre' : `${rating} anos`
   return <span className={`${styles.badge} ${cls}`}>{label}</span>
+}
+
+/* ═══════════════════════════════════════════════════════
+   INTRO SCREEN
+═══════════════════════════════════════════════════════ */
+function IntroScreen({ onComplete }) {
+  return (
+    <motion.div
+      className={styles.intro}
+      exit={{ opacity: 0, scale: 1.04 }}
+      transition={{ duration: 0.75, ease: [0.4, 0, 0.2, 1] }}
+    >
+      <motion.img
+        src="/logo-white.png"
+        alt="Cinex Cinema"
+        className={styles.introLogo}
+        initial={{ opacity: 0, scale: 0.7, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+      />
+      <div className={styles.introBarWrap}>
+        <motion.div
+          className={styles.introBar}
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 2.2, ease: [0.4, 0, 0.2, 1], delay: 0.25 }}
+          onAnimationComplete={onComplete}
+        />
+      </div>
+    </motion.div>
+  )
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -73,7 +104,7 @@ function Hero() {
           className={styles.heroCta}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.55 }}
         >
           Ver programação
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -81,10 +112,14 @@ function Hero() {
           </svg>
         </motion.a>
       </motion.div>
-      <div className={styles.heroScroll}>
-        <span className={styles.heroScrollLabel}>Scroll</span>
-        <div className={styles.heroScrollArrow} />
-      </div>
+      <a href="#programacao" className={styles.heroScroll} aria-label="Role para baixo">
+        <span className={styles.heroScrollLabel}>Role para baixo</span>
+        <div className={styles.heroArrows}>
+          <div className={styles.heroArrow} />
+          <div className={styles.heroArrow} />
+          <div className={styles.heroArrow} />
+        </div>
+      </a>
     </section>
   )
 }
@@ -93,10 +128,14 @@ function Hero() {
    POSTER CARD
 ═══════════════════════════════════════════════════════ */
 const cardEntrance = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  hidden:  { opacity: 0, y: 48, scale: 0.92 },
   visible: (i) => ({
     opacity: 1, y: 0, scale: 1,
-    transition: { duration: 0.65, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: {
+      duration: 0.7,
+      delay: i * 0.09,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
   }),
 }
 
@@ -115,15 +154,18 @@ function PosterCard({ movie, index, onClick }) {
       onKeyDown={(e) => e.key === 'Enter' && onClick(movie)}
       aria-label={`Ver ${movie.title}`}
     >
-      {movie.poster && !err
-        ? <img src={movie.poster} alt={movie.title} className={styles.cardImg} loading="lazy" onError={() => setErr(true)} />
-        : <div className={styles.cardPlaceholder}>🎬</div>
-      }
-      <div className={styles.cardOverlay}>
-        <div className={styles.cardTitle}>{movie.title}</div>
-        <div className={styles.cardMeta}>
-          <AgeBadge rating={movie.ageRating} />
-          <span className={styles.cardGenre}>{movie.genre}</span>
+      {/* inner wrapper clips image + overlay to border-radius */}
+      <div className={styles.cardInner}>
+        {movie.poster && !err
+          ? <img src={movie.poster} alt={movie.title} className={styles.cardImg} loading="lazy" onError={() => setErr(true)} />
+          : <div className={styles.cardPlaceholder}>🎬</div>
+        }
+        <div className={styles.cardOverlay}>
+          <div className={styles.cardTitle}>{movie.title}</div>
+          <div className={styles.cardMeta}>
+            <AgeBadge rating={movie.ageRating} />
+            <span className={styles.cardGenre}>{movie.genre}</span>
+          </div>
         </div>
       </div>
     </motion.article>
@@ -134,7 +176,7 @@ function PosterCard({ movie, index, onClick }) {
    POSTER GRID
 ═══════════════════════════════════════════════════════ */
 function PosterGrid({ onSelect }) {
-  const ref = useRef(null)
+  const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   return (
     <section className={styles.section} id="programacao">
@@ -152,11 +194,11 @@ function PosterGrid({ onSelect }) {
 }
 
 /* ═══════════════════════════════════════════════════════
-   MOVIE DETAIL — full-page overlay
+   MOVIE DETAIL
 ═══════════════════════════════════════════════════════ */
 function MovieDetail({ movie, onClose }) {
   const [playTrailer, setPlayTrailer] = useState(false)
-  const [imgErr, setImgErr] = useState(false)
+  const [imgErr, setImgErr]           = useState(false)
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose() }
@@ -177,127 +219,129 @@ function MovieDetail({ movie, onClose }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.3 }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
+      {/* Outer wrap holds the spinning neon border */}
       <motion.div
-        className={styles.detailPanel}
-        initial={{ opacity: 0, scale: 0.93, y: 30 }}
+        className={styles.detailPanelWrap}
+        initial={{ opacity: 0, scale: 0.9, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96, y: 16 }}
-        transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+        exit={{ opacity: 0, scale: 0.94, y: 20 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        {/* Blurred poster bg */}
-        <div className={styles.detailBg}>
-          {movie.posterFull && <img src={movie.posterFull} alt="" className={styles.detailBgImg} aria-hidden />}
-        </div>
+        <div className={styles.detailPanel}>
 
-        {/* Close */}
-        <button className={styles.detailClose} onClick={onClose} aria-label="Fechar">✕</button>
-
-        {/* Left — poster */}
-        <div className={styles.detailPoster}>
-          {movie.poster && !imgErr
-            ? <img src={movie.poster} alt={movie.title} className={styles.detailPosterImg} onError={() => setImgErr(true)} />
-            : <div className={styles.cardPlaceholder}>🎬</div>
-          }
-        </div>
-
-        {/* Right — content */}
-        <div className={styles.detailContent}>
-
-          {/* Header */}
-          <div className={styles.detailHeader}>
-            <div className={styles.detailVersion}>{movie.version}</div>
-            <h2 className={styles.detailTitle}>{movie.title}</h2>
-            <div className={styles.detailMetaRow}>
-              <AgeBadge rating={movie.ageRating} />
-              <span className={styles.detailGenre}>{movie.genre}</span>
-              <span className={styles.detailDistributor}>{movie.distributor}</span>
-            </div>
+          {/* Blurred bg */}
+          <div className={styles.detailBg}>
+            {movie.posterFull && <img src={movie.posterFull} alt="" className={styles.detailBgImg} aria-hidden />}
           </div>
 
-          {/* Synopsis */}
-          {movie.synopsis && <p className={styles.detailSynopsis}>{movie.synopsis}</p>}
+          {/* Close */}
+          <button className={styles.detailClose} onClick={onClose} aria-label="Fechar">✕</button>
 
-          {/* Trailer */}
-          {movie.trailerKey && (
-            <div className={styles.trailerBlock}>
-              <div className={styles.blockLabel}>Trailer</div>
-              <div className={styles.trailerBox}>
-                {playTrailer ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0&modestbranding=1`}
-                    title={`Trailer — ${movie.title}`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <div className={styles.trailerThumb} onClick={() => setPlayTrailer(true)} role="button" aria-label="Assistir trailer">
-                    <img
-                      src={`https://img.youtube.com/vi/${movie.trailerKey}/maxresdefault.jpg`}
-                      alt="Thumbnail do trailer"
-                      className={styles.trailerThumbImg}
+          {/* Poster */}
+          <div className={styles.detailPoster}>
+            {movie.poster && !imgErr
+              ? <img src={movie.poster} alt={movie.title} className={styles.detailPosterImg} onError={() => setImgErr(true)} />
+              : <div className={styles.cardPlaceholder}>🎬</div>
+            }
+          </div>
+
+          {/* Content */}
+          <div className={styles.detailContent}>
+
+            <div className={styles.detailHeader}>
+              <div className={styles.detailVersion}>{movie.version}</div>
+              <h2 className={styles.detailTitle}>{movie.title}</h2>
+              <div className={styles.detailMetaRow}>
+                <AgeBadge rating={movie.ageRating} />
+                <span className={styles.detailGenre}>{movie.genre}</span>
+                <span className={styles.detailDistributor}>{movie.distributor}</span>
+              </div>
+            </div>
+
+            {movie.synopsis && <p className={styles.detailSynopsis}>{movie.synopsis}</p>}
+
+            {/* Trailer */}
+            {movie.trailerKey && (
+              <div className={styles.trailerBlock}>
+                <div className={styles.blockLabel}>Trailer</div>
+                <div className={styles.trailerBox}>
+                  {playTrailer ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${movie.trailerKey}?autoplay=1&rel=0&modestbranding=1`}
+                      title={`Trailer — ${movie.title}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
                     />
-                    <div className={styles.playBtn}>
-                      <div className={styles.playBtnInner}>
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
-                          <path d="M6 4l10 6-10 6V4z"/>
-                        </svg>
+                  ) : (
+                    <div className={styles.trailerThumb} onClick={() => setPlayTrailer(true)} role="button" aria-label="Assistir trailer">
+                      <img
+                        src={`https://img.youtube.com/vi/${movie.trailerKey}/maxresdefault.jpg`}
+                        alt="Thumbnail"
+                        className={styles.trailerThumbImg}
+                      />
+                      <div className={styles.playBtn}>
+                        <div className={styles.playBtnInner}>
+                          <svg width="20" height="20" viewBox="0 0 20 20" fill="white">
+                            <path d="M6 4l10 6-10 6V4z"/>
+                          </svg>
+                        </div>
                       </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Showtimes */}
+            <div className={styles.showtimes}>
+              <div className={styles.blockLabel}>Horários — semana {fmtWeek(scheduleWeek.start, scheduleWeek.end)}</div>
+              <div className={styles.roomsRow}>
+                {sala1.length > 0 && (
+                  <div className={styles.roomRow}>
+                    <span className={`${styles.roomTag} ${styles.sala1}`}>Sala 1</span>
+                    <div className={styles.timePills}>
+                      {sala1.map((s, i) => (
+                        <div className={styles.timePill} key={i}>
+                          <span className={styles.timeHour}>{s.time}</span>
+                          <span className={styles.timeVer}>{s.version}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {sala2.length > 0 && (
+                  <div className={styles.roomRow}>
+                    <span className={`${styles.roomTag} ${styles.sala2}`}>Sala 2</span>
+                    <div className={styles.timePills}>
+                      {sala2.map((s, i) => (
+                        <div className={styles.timePill} key={i}>
+                          <span className={styles.timeHour}>{s.time}</span>
+                          <span className={styles.timeVer}>{s.version}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
               </div>
             </div>
-          )}
 
-          {/* Showtimes */}
-          <div className={styles.showtimes}>
-            <div className={styles.blockLabel}>Horários — semana {fmtWeek(scheduleWeek.start, scheduleWeek.end)}</div>
-            <div className={styles.roomsRow}>
-              {sala1.length > 0 && (
-                <div className={styles.roomRow}>
-                  <span className={`${styles.roomTag} ${styles.sala1}`}>Sala 1</span>
-                  <div className={styles.timePills}>
-                    {sala1.map((s, i) => (
-                      <div className={styles.timePill} key={i}>
-                        <span className={styles.timeHour}>{s.time}</span>
-                        <span className={styles.timeVer}>{s.version}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {sala2.length > 0 && (
-                <div className={styles.roomRow}>
-                  <span className={`${styles.roomTag} ${styles.sala2}`}>Sala 2</span>
-                  <div className={styles.timePills}>
-                    {sala2.map((s, i) => (
-                      <div className={styles.timePill} key={i}>
-                        <span className={styles.timeHour}>{s.time}</span>
-                        <span className={styles.timeVer}>{s.version}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Presencial */}
+            <div className={styles.presencialBox}>
+              <div className={styles.presencialIcon}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a3 3 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"/>
+                </svg>
+              </div>
+              <p>
+                <strong>Venda somente presencial.</strong>{' '}
+                Ingressos na bilheteria do Cinex — Centro Cultural Oscar Niemeyer, Goiânia.
+              </p>
             </div>
-          </div>
 
-          {/* Presencial */}
-          <div className={styles.presencialBox}>
-            <div className={styles.presencialIcon}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a3 3 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a3 3 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"/>
-              </svg>
-            </div>
-            <p>
-              <strong>Venda somente presencial.</strong>{' '}
-              Ingressos na bilheteria do Cinex — Centro Cultural Oscar Niemeyer, Goiânia.
-            </p>
           </div>
-
         </div>
       </motion.div>
     </motion.div>
@@ -371,11 +415,22 @@ function Footer() {
    APP ROOT
 ═══════════════════════════════════════════════════════ */
 export default function App() {
-  const [selected, setSelected] = useState(null)
+  const [showIntro, setShowIntro] = useState(true)
+  const [selected,  setSelected]  = useState(null)
+
   const open  = useCallback((m) => setSelected(m), [])
   const close = useCallback(() => setSelected(null), [])
+
   return (
     <>
+      {/* Intro overlay — site loads underneath */}
+      <AnimatePresence>
+        {showIntro && (
+          <IntroScreen onComplete={() => setShowIntro(false)} />
+        )}
+      </AnimatePresence>
+
+      {/* Main site */}
       <Navbar />
       <main>
         <Hero />
@@ -383,6 +438,8 @@ export default function App() {
         <InfoBar />
       </main>
       <Footer />
+
+      {/* Movie detail */}
       <AnimatePresence>
         {selected && <MovieDetail key={selected.id} movie={selected} onClose={close} />}
       </AnimatePresence>
